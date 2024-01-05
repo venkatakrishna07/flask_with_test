@@ -18,27 +18,23 @@ pipeline {
     agent {
         docker {
             image 'python:3.10'
-            args '-v ${PWD}:/workspace'
         }
+    }
+    environment {
+        WORKSPACE = "/workspace"
     }
     stages {
         stage('build') {
             steps {
-                script {
-                    def workspacePath = '/workspace'
-                    dir(workspacePath) {
-                        sh 'pip install flask'
-                    }
+                dir("${WORKSPACE}") {
+                    sh 'pip install flask'
                 }
             }
         }
         stage('test') {
             steps {
-                script {
-                    def workspacePath = '/workspace'
-                    dir(workspacePath) {
-                        sh 'pytest test_file.py'
-                    }
+                dir("${WORKSPACE}") {
+                    sh 'pytest test_file.py'
                 }
             }
         }
